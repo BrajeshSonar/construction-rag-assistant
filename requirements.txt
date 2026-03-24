@@ -1,0 +1,9 @@
+faiss-cpu
+sentence-transformers
+openai
+gradio
+numpy
+pydantic
+python-docx
+PyMuPDF
+tqdm
