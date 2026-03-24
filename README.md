@@ -1,4 +1,4 @@
-# 🏗️ Construction Marketplace AI Assistant (RAG-based)
+# Construction Marketplace AI Assistant (RAG-based)
 
 This project implements a **Retrieval-Augmented Generation (RAG)** system to answer construction-related queries using internal documents.  
 The system retrieves relevant information from documents and generates **accurate, grounded responses** using a Large Language Model.
@@ -54,7 +54,7 @@ construction-rag-assistant/
 
 ### 1. Clone Repository
 
-git clone https://github.com/your-username/construction-rag-assistant.git
+git clone https://github.com/BrajeshSonar/construction-rag-assistant.git
 
 cd construction-rag-assistant
 
