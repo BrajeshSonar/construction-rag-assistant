@@ -1,11 +1,11 @@
 # Construction Marketplace AI Assistant (RAG-based)
 
 This project implements a **Retrieval-Augmented Generation (RAG)** system to answer construction-related queries using internal documents.  
-The system retrieves relevant information from documents and generates **accurate, grounded responses** using a Large Language Model.
+The system retrieves relevant information from documents and generates **accurate, grounded, and explainable responses** using a Large Language Model.
 
 ---
 
-## 🚀 Features
+## Features
 
 - Semantic search using FAISS
 - Context-aware answer generation using LLM
@@ -16,7 +16,7 @@ The system retrieves relevant information from documents and generates **accurat
 
 ---
 
-## 🧱 System Architecture
+## System Architecture
 
 User Query  
 ↓  
@@ -32,34 +32,43 @@ Final Answer + Sources
 
 ---
 
-## 📂 Project Structure
+## Project Structure
 
 
 construction-rag-assistant/
 │
-├── app.py # Main application (RAG + UI)
+├── app.py # Main application (RAG pipeline + UI)
 ├── notebook.ipynb # Development notebook
 ├── requirements.txt
 ├── README.md
 │
 ├── mini_rag/
 │ ├── data/ # Input documents
-│ ├── faiss.index # Saved FAISS index
-│ └── chunks.pkl # Stored chunks
+│ │ ├── doc1.md
+│ │ ├── doc2.md
+│ │ ├── doc3.md
+│ ├── faiss.index # Saved FAISS index (optional)
+│ └── chunks.pkl # Stored chunks (optional)
 
 
 ---
 
-## ⚙️ Installation
+## ⚙️ Installation & Local Setup
 
-### 1. Clone Repository
+### 1. Clone the Repository
 
 git clone https://github.com/BrajeshSonar/construction-rag-assistant.git
 
 cd construction-rag-assistant
 
 
-### 2. Install Dependencies
+### 2. Create Virtual Environment (Recommended)
+
+py -3.10 -m venv venv
+venv\Scripts\activate
+
+
+### 3. Install Dependencies
 
 pip install -r requirements.txt
 
@@ -70,42 +79,33 @@ pip install -r requirements.txt
 
 1. Go to https://openrouter.ai  
 2. Generate an API key  
-3. Set it in your code:
+3. Set it in your environment:
 
 ```python
 import os
 os.environ["OPENROUTER_API_KEY"] = "your-api-key"
-📥 Data Preparation
-
-Place your documents inside:
-
-mini_rag/data/
-
-Supported formats:
-
-.md
-.txt
-.pdf
-.docx
-▶️ Running the Application
-
-Run the chatbot:
-
+▶️ Run the Application
 python app.py
 
-Then open the link shown in terminal:
+Then open:
 
 http://127.0.0.1:7860
-🧠 Model Details
+🧠 Methodology
+1. Embedding Model and LLM Selection
 Embedding Model
-all-MiniLM-L6-v2
+Model Used: all-MiniLM-L6-v2
+Reason:
 Lightweight and fast
 Good semantic understanding
+Works efficiently on CPU
 LLM
-openai/gpt-4o-mini (via OpenRouter)
-Low cost and fast
-Reliable for grounded responses
-✂️ Chunking Strategy
+Model Used: openai/gpt-4o-mini via OpenRouter
+Reason:
+Low latency and cost-effective
+Strong performance for QA tasks
+Works well with structured prompts
+2. Document Chunking and Retrieval
+Chunking Strategy
 Fixed chunk size (e.g., 500 characters)
 Overlap between chunks (e.g., 100 characters)
 
@@ -113,30 +113,39 @@ Benefits:
 
 Preserves context
 Improves retrieval accuracy
-🔍 Retrieval Mechanism
-Embeddings stored in FAISS index
-Cosine similarity used for matching
-Top-K relevant chunks retrieved
-🛡️ Grounding Strategy
+Prevents information loss
+Embedding & Storage
+Each chunk is converted into embeddings
+Stored in a FAISS vector database
+Retrieval Process
+Query is embedded
+FAISS performs cosine similarity search
+Top-K relevant chunks are retrieved
+3. Grounding to Retrieved Context
 
-The system enforces grounding by:
+To ensure reliable responses:
 
-Passing only retrieved context to the LLM
-Restricting the model from using external knowledge
-Returning "not found" if context is insufficient
+Only retrieved context is passed to the LLM
+The system prompt enforces:
+No external knowledge usage
+Strict reliance on provided context
 
-This ensures:
+If no answer is found:
 
-No hallucination
-Reliable answers
-Source transparency
+"I could not find an answer in the provided documents."
+
+Benefits:
+
+Prevents hallucination
+Ensures transparency
+Provides traceable answers
 💬 Chatbot Interface
 
-Built using Gradio with features:
+Built using Gradio with:
 
 Interactive chat UI
 Answer + source display
-FAQ quick buttons
+FAQ buttons
 Clipboard copy functionality
 🧪 Example Query
 
@@ -154,8 +163,8 @@ Chunking may split sentences
 Requires API key for LLM
 🔮 Future Improvements
 Smarter chunking (sentence-based)
-Better ranking strategies
-UI enhancements
+Improved ranking strategies
+Better UI enhancements
 Deployment optimization
 👨‍💻 Author
 
@@ -172,7 +181,5 @@ This project demonstrates a complete RAG pipeline combining:
 
 Retrieval (FAISS)
 Generation (LLM)
-Transparency (source citation)
+Grounding (context-only answers)
 Usability (chat interface)
-
-It ensures accurate and explainable AI responses for construction-related queries.
